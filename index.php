@@ -108,12 +108,19 @@ if (!isset($headers['X-Jms-Api-Key'])) {
 $hasFile = isset($_FILES['file']);
 $privatePath = dirname(__FILE__) . '/private/';
 $dataPath = $privatePath . 'data/';
+$historyPath = $privatePath . 'data/history/';
 $interfacePath = $privatePath . 'interfaces/';
 $uploadDir = $privatePath . 'files/';
 $serverSettings = [
     "uploadMaxSize" => ini_get('upload_max_filesize'),
     "postMaxSize" => ini_get('post_max_size'),
     'publicUrl' => $publicFilePath,
+    'version' => 1,
+    'features' => [
+        'interface/get',
+        'interface/post',
+        'interface/upload',
+    ],
 ];
 
 // Create directories if they do not exist
@@ -122,6 +129,9 @@ if (!is_dir($interfacePath)) {
 }
 if (!is_dir($dataPath)) {
     mkdir($dataPath, 0755, true);
+}
+if (!is_dir($historyPath)) {
+    mkdir($historyPath, 0755, true);
 }
 if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0755, true);
@@ -242,20 +252,21 @@ else if ($hasFile && $_SERVER['REQUEST_METHOD'] === 'POST') {
 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
     $data = (object) json_decode($json, true);
+    $filePath = $dataPath . $data->hash . '.json';
 
     if (json_last_error() !== JSON_ERROR_NONE) {
         throwError(400, 'Invalid JSON');
     }
 
+    // Save to history if file already exists
+    if (file_exists($filePath)) {
+        $timestamp = filemtime($filePath);
+        copy($filePath, $historyPath . $data->hash . '.' . $timestamp . '.json');
+    }
+
     // Save the data and interface to JSON files
-    file_put_contents(
-        $dataPath . $data->hash . '.json',
-        json_encode($data->data)
-    );
-    file_put_contents(
-        $interfacePath . $data->hash . '.json',
-        json_encode($data->interface)
-    );
+    file_put_contents($filePath, json_encode($data->data));
+    file_put_contents($interfacePath . $data->hash . '.json', json_encode($data->interface));
     http_response_code(200);
     echo json_encode($data);
     exit;
