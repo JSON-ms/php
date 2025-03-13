@@ -200,6 +200,7 @@ else if ($hasFile && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileName = $_FILES['file']['name'];
         $fileSize = $_FILES['file']['size'];
         $fileType = $_FILES['file']['type'];
+        $imageTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
 
         // Specify the directory where the file will be saved
@@ -208,11 +209,23 @@ else if ($hasFile && $_SERVER['REQUEST_METHOD'] === 'POST') {
         // Move the uploaded file to the destination directory
         if (move_uploaded_file($fileTmpPath, $destPath)) {
             $internalPath = str_replace($uploadDir, '', $destPath);
+            $meta = [
+                'size' => $fileSize,
+                'type' => $fileType,
+            ];
+
+            if (in_array($fileType, $imageTypes)) {
+                list($width, $height) = getimagesize($destPath);
+                $meta['width'] = $width;
+                $meta['height'] = $height;
+            }
+
             http_response_code(200);
             echo json_encode([
                 'success' => true,
                 'publicPath' => $publicFilePath . $internalPath,
                 'internalPath' => $internalPath,
+                'meta' => $meta,
             ]);
             exit;
         } else {
