@@ -3,14 +3,24 @@
 /**
  * Configurations: You can change
  */
-$secretKey = '28c96e7c3e240b71422751a1';
-$cypherKey = '662fd00533a2285b9bb49297';
-$accessControlAllowOrigin = 'http://localhost:3000';
-$publicFilePath = 'https://local.demo.json.ms/files/';
+prepareEnvironmentVariables();
+$secretKey = getenv('JSONMS_SECRET_KEY', 'YOUR_VALUE_HERE');
+$cypherKey = getenv('JSONMS_CYPHER_KEY', 'YOUR_VALUE_HERE');
+$accessControlAllowOrigin = getenv('ACCESS_CONTROL_ALLOW_ORIGIN', 'YOUR_VALUE_HERE');
+$publicFilePath = getenv('PUBLIC_FILE_PATH', 'YOUR_VALUE_HERE');
 
 /**
  * Script: CHANGE AT YOUR OWN RISKS
  */
+function prepareEnvironmentVariables() {
+    foreach (file('.env') as $line) {
+        if (trim($line) === '' || strpos($line, '#') === 0) {
+            continue;
+        }
+        list($key, $value) = explode('=', $line, 2);
+        putenv(trim($key) . '=' . trim($value, " \t\n\r\0\x0B\"'"));
+    }
+}
 
 // Function to handle errors and send appropriate HTTP response
 function throwError($code, $body) {
