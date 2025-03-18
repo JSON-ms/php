@@ -114,13 +114,12 @@ if (!isset($headers['X-Jms-Api-Key'])) {
 /**
  * File Upload and Directory Setup
  */
-
-// Check if a file is being uploaded
 $hasFile = isset($_FILES['file']);
 $privatePath = dirname(__FILE__) . '/private/';
 $dataPath = $privatePath . 'data/';
-$historyPath = $privatePath . 'data/history/';
+$dataHistoryPath = $privatePath . 'data/history/';
 $interfacePath = $privatePath . 'interfaces/';
+$interfaceHistoryPath = $privatePath . 'interfaces/history/';
 $uploadDir = $privatePath . 'files/';
 $serverSettings = [
     "uploadMaxSize" => ini_get('upload_max_filesize'),
@@ -141,8 +140,11 @@ if (!is_dir($interfacePath)) {
 if (!is_dir($dataPath)) {
     mkdir($dataPath, 0755, true);
 }
-if (!is_dir($historyPath)) {
-    mkdir($historyPath, 0755, true);
+if (!is_dir($dataHistoryPath)) {
+    mkdir($dataHistoryPath, 0755, true);
+}
+if (!is_dir($interfaceHistoryPath)) {
+    mkdir($interfaceHistoryPath, 0755, true);
 }
 if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0755, true);
@@ -263,21 +265,26 @@ else if ($hasFile && $_SERVER['REQUEST_METHOD'] === 'POST') {
 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
     $data = (object) json_decode($json, true);
-    $filePath = $dataPath . $data->hash . '.json';
+    $dataFilePath = $dataPath . $data->hash . '.json';
+    $interfaceFilePath = $interfacePath . $data->hash . '.json';
 
     if (json_last_error() !== JSON_ERROR_NONE) {
         throwError(400, 'Invalid JSON');
     }
 
-    // Save to history if file already exists
-    if (file_exists($filePath)) {
-        $timestamp = filemtime($filePath);
-        copy($filePath, $historyPath . $data->hash . '.' . $timestamp . '.json');
+    // Save to data and interface history if files already exist
+    if (file_exists($dataFilePath)) {
+        $timestamp = filemtime($dataFilePath);
+        copy($dataFilePath, $dataHistoryPath . $data->hash . '.' . $timestamp . '.json');
+    }
+    if (file_exists($interfaceFilePath)) {
+        $timestamp = filemtime($interfaceFilePath);
+        copy($interfaceFilePath, $interfaceHistoryPath . $data->hash . '.' . $timestamp . '.json');
     }
 
     // Save the data and interface to JSON files
-    file_put_contents($filePath, json_encode($data->data));
-    file_put_contents($interfacePath . $data->hash . '.json', json_encode($data->interface));
+    file_put_contents($dataFilePath, json_encode($data->data));
+    file_put_contents($interfaceFilePath, json_encode($data->interface));
     http_response_code(200);
     echo json_encode($data);
     exit;
