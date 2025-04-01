@@ -1,0 +1,20 @@
+{
+    "name": "jsonms/php",
+    "description": "A JSON.ms requests handler to install on your own server.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "JSONms\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "JSON.ms"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "james-heinrich/getid3": "^1.9"
+    }
+}
