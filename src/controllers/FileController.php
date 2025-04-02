@@ -22,21 +22,23 @@ class FileController extends BaseController {
     public function readAction(string $filepath): void {
 
         $filepath = $this->uploadDir . $filepath;
+        if (file_exists($filepath)) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE); // Return mime type
+            $contentType = finfo_file($finfo, $filepath);
 
-        // Set headers to force download
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . basename($filepath) . '"');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($filepath));
+            header('Content-Description: File Transfer');
+            header('Content-Type: ' . $contentType);
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filepath));
 
-        // Returns the file
-        ob_clean();
-        flush();
-        readfile($filepath);
-        exit;
+            // Returns the file
+            ob_clean();
+            flush();
+            readfile($filepath);
+            exit;
+        }
     }
 
     public function uploadAction(string $hash) {

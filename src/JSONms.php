@@ -33,11 +33,6 @@ class JSONms {
         register_shutdown_function(['JSONms\Utils\ErrorHandler', 'shutdownFunction']);
     }
 
-    public function handleMiddlewares() {
-        Cors::run();
-        Secret::run();
-    }
-
     public function handleRequests($uri = null) {
         if ($uri === null) {
             $uri = $_SERVER['REQUEST_URI'];
@@ -84,11 +79,15 @@ class JSONms {
                     }
                 }
 
-                if (!($controllerName === 'FileController' && $actionName === 'read')) {
-                    $this->handleMiddlewares();
+                Cors::run();
+                if (
+                    !($controllerName == 'FileController' && $actionName == 'read')
+                    || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+                ) {
+                    Secret::run();
                 }
 
-                if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_FILES)) {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_FILES) === 0) {
                     $json = file_get_contents('php://input');
                     $data = json_decode($json);
 
