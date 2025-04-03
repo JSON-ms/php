@@ -2,6 +2,8 @@
 
 namespace JSONms\Controllers;
 
+use getID3;
+use getid3_exception;
 use JSONms\Utils\ErrorHandler;
 
 class FileController extends BaseController {
@@ -105,13 +107,14 @@ class FileController extends BaseController {
                 // Get video width/height
                 if (str_starts_with($fileType, 'video/')) {
                     try {
-                        $getID3 = new \getID3();
+                        require_once dirname(__FILE__) . '/../../vendor/james-heinrich/getid3/getid3/getid3.php';
+                        $getID3 = new getID3;
                         $fileInfo = $getID3->analyze($destPath);
                         if (isset($fileInfo['video'])) {
-                            $meta['width'] = $fileInfo['video']['width'];
-                            $meta['height'] = $fileInfo['video']['height'];
+                            $meta['width'] = $fileInfo['video']['resolution_x'];
+                            $meta['height'] = $fileInfo['video']['resolution_y'];
                         }
-                    } catch (\getid3_exception $e) {
+                    } catch (getid3_exception $e) {
 
                     }
                 }
