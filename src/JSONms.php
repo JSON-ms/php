@@ -33,6 +33,11 @@ class JSONms {
         register_shutdown_function(['JSONms\Utils\ErrorHandler', 'shutdownFunction']);
     }
 
+    public function handleMiddlewares() {
+        Cors::run();
+        Secret::run();
+    }
+
     public function handleRequests($uri = null) {
         if ($uri === null) {
             $uri = $_SERVER['REQUEST_URI'];
@@ -44,7 +49,7 @@ class JSONms {
 
         $controllerName = ucfirst($splitRequestUri[0]) . 'Controller';
         $controllerNameAndSpace = '\\JSONms\\Controllers\\' . ucfirst($splitRequestUri[0]) . 'Controller';
-        $srcPath = __DIR__ . '/controllers/' . $controllerName . '.php';
+        $srcPath = __DIR__ . '/Controllers/' . $controllerName . '.php';
 
         // Check if the requested script exists
         if (file_exists($srcPath)) {
