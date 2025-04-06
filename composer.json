@@ -1,21 +1,24 @@
 {
-    "version": "1.0.0",
-    "name": "jsonms/php",
-    "description": "A JSON.ms requests handler to install on your own server.",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "JSONms\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "JSON.ms"
-        }
-    ],
-    "require": {
-        "php": "^8.0",
-        "james-heinrich/getid3": "^1.9"
+  "version": "1.0.1",
+  "name": "jsonms/php",
+  "description": "A JSON.ms requests handler to install on your own server.",
+  "type": "library",
+  "license": "MIT",
+  "scripts": {
+    "setup-hooks": "cp .pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit"
+  },
+  "autoload": {
+    "psr-4": {
+      "JSONms\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "JSON.ms"
+    }
+  ],
+  "require": {
+    "php": "^8.0",
+    "james-heinrich/getid3": "^1.9"
+  }
 }
