@@ -1,11 +1,14 @@
 {
-  "version": "1.0.5",
+  "version": "1.0.6",
   "name": "jsonms/php",
   "description": "A JSON.ms requests handler to install on your own server.",
   "type": "library",
   "license": "MIT",
   "scripts": {
-    "setup-hooks": "cp .pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit"
+    "setup-hooks": "cp .pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit",
+    "post-install-cmd": [
+      "php install.php"
+    ]
   },
   "autoload": {
     "psr-4": {
