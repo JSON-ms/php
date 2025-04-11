@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "setup-hooks": "cp .pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit",
-    "post-install-cmd": [
+    "post-package-install": [
       "php install.php"
     ]
   },
