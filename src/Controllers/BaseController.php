@@ -16,7 +16,7 @@ abstract class BaseController {
 
     public function __construct() {
         $this->privatePath = Config::get('PRIVATE_FILE_PATH');
-        $this->publicFilePath = Config::get('PUBLIC_FILE_PATH');
+        $this->publicFilePath = Config::get('PUBLIC_FILE_PATH') . '/file/get';
         $this->dataPath = $this->privatePath . '/data/';
         $this->dataHistoryPath = $this->privatePath . '/data/history/';
         $this->interfacePath = $this->privatePath . '/interfaces/';
