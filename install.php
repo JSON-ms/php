@@ -50,7 +50,7 @@ require 'vendor/autoload.php';
 
 EOD;
 
-    file_put_contents(dirname(__FILE__) . '/index.php', $fileContent);
+    file_put_contents(getcwd() . '/index.php', $fileContent);
 
-    echo COLOR_GREEN . 'A new index.php file has been created!' . COLOR_WHITE;
+    echo COLOR_GREEN . 'A new index.php file has been created!' . COLOR_WHITE . "\n";
 }
