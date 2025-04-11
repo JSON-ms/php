@@ -24,19 +24,20 @@ class FileController extends BaseController {
     public function readAction(string $filepath): void {
 
         $filepath = $this->uploadDir . $filepath;
+        $filepath = str_replace('//', '/', $filepath);
+
         if (file_exists($filepath)) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE); // Return mime type
             $contentType = finfo_file($finfo, $filepath);
 
             header('Content-Description: File Transfer');
-            header('Content-Type: ' . $contentType);
             header('Expires: 0');
             header('Cache-Control: must-revalidate');
             header('Pragma: public');
             header('Content-Length: ' . filesize($filepath));
+            header('Content-Type: ' . $contentType);
 
             // Returns the file
-            ob_clean();
             flush();
             readfile($filepath);
             exit;
