@@ -125,18 +125,19 @@ class FileController extends BaseController {
                 if (file_exists($fileListPath)) {
                     try {
                         $fileList = json_decode(file_get_contents($fileListPath));
-                        $fileList[] = [
-                            'path' => $internalPath,
-                            'meta' => $meta,
-                        ];
-                        $fileList = array_filter($fileList, function($item) use ($internalPath) {
-                            return !(isset($item->path) && $item->path === $internalPath);
-                        });
-                        file_put_contents($fileListPath, json_encode(array_values($fileList)));
                     } catch (\Exception $e) {
 
                     }
                 }
+                $fileList[] = [
+                    'path' => $internalPath,
+                    'meta' => $meta,
+                ];
+                $fileList = array_filter($fileList, function($item) use ($internalPath) {
+                    return !(isset($item->path) && $item->path === $internalPath);
+                });
+                file_put_contents($fileListPath, json_encode(array_values($fileList)));
+
 
                 // Return response
                 http_response_code(200);
