@@ -6,11 +6,26 @@ A PHP request handler to use as a endpoint and configure as a webhook in [json.m
 
 You can install `jsonms/php` via composer:
 
+### Requirements
+
 ```sh
 composer require jsonms/php
 ```
 
-### Usage
+### Preparation
+
+Make sure you first created a webhook in the JSON.ms Settings section of your interface. Obtain your secret and cypher key using the Get button of each field.
+
+### Configuration
+
+For auto-configuration, you can launch the install script.
+
+```bash
+php vendor/jsonms/php/install.php
+```
+
+Or create a index.php file manually in your directory.
+
 ```php
 <?php
 
@@ -31,3 +46,13 @@ $jsonms = new JSONms(
 $jsonms->handleErrors(); // Optional. Remove if you prefer to handle errors yourself.
 $jsonms->handleRequests(); // You can pass an URI param. (ex: /data/get/YOUR_HASH)
 ```
+
+## Usage
+
+To test locally, you can start a PHP built-in Web server:
+
+```bash
+php -S localhost:8080 index.php
+```
+
+Now you can read, save, upload and delete data from your server with any project bound to the webhook you configured as long as this server is running!

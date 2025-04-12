@@ -11,13 +11,13 @@ class JSONms {
 
     public function __construct(
         string $privatePath,
-        string $publicPath,
+        string $publicUrl,
         string $accessControlAllowOrigin,
         string $secretKey,
         string $cypherKey,
     ) {
         Config::set('PRIVATE_FILE_PATH', $privatePath);
-        Config::set('PUBLIC_FILE_PATH', $publicPath);
+        Config::set('PUBLIC_URL', $publicUrl);
         Config::set('ACCESS_CONTROL_ALLOW_ORIGIN', $accessControlAllowOrigin);
         Config::set('SECRET_KEY', $secretKey);
         Config::set('CYPHER_KEY', $cypherKey);
