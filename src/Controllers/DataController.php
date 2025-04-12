@@ -25,7 +25,7 @@ class DataController extends BaseController {
             'settings' => [
                 "uploadMaxSize" => ini_get('upload_max_filesize'),
                 "postMaxSize" => ini_get('post_max_size'),
-                'publicUrl' => $this->publicFilePath,
+                'publicUrl' => $this->publicUrl,
                 'version' => 1,
                 'features' => [
                     'data/get',

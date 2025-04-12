@@ -144,7 +144,7 @@ class FileController extends BaseController {
                 http_response_code(200);
                 echo json_encode([
                     'success' => true,
-                    'publicPath' => $this->publicFilePath . $internalPath,
+                    'publicPath' => $this->publicUrl . $internalPath,
                     'internalPath' => $internalPath,
                     'meta' => $meta,
                 ]);
