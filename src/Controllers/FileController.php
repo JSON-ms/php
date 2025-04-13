@@ -95,6 +95,7 @@ class FileController extends BaseController {
                 $meta = [
                     'size' => $fileSize,
                     'type' => $fileType,
+                    'timestamp' => time(),
                     'originalFileName' => $fileName,
                 ];
 
@@ -138,7 +139,6 @@ class FileController extends BaseController {
                     return !(isset($item->path) && $item->path === $internalPath);
                 });
                 file_put_contents($fileListPath, json_encode(array_values($fileList)));
-
 
                 // Return response
                 http_response_code(200);
