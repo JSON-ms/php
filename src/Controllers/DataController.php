@@ -3,6 +3,7 @@
 namespace JSONms\Controllers;
 
 use JSONms\Utils\ErrorHandler;
+use JSONms\Utils\Composer;
 
 class DataController extends BaseController {
 
@@ -26,14 +27,14 @@ class DataController extends BaseController {
                 "uploadMaxSize" => ini_get('upload_max_filesize'),
                 "postMaxSize" => ini_get('post_max_size'),
                 'publicUrl' => $this->publicUrl,
-                'version' => 1,
-                'features' => [
+                'version' => Composer::getVersion(),
+                'supportedFeatures' => [
                     'data/get',
                     'data/update',
-                    'data/history',
-                    'file/index',
+                    'file/list',
                     'file/read',
                     'file/upload',
+                    'file/delete',
                 ],
             ],
         ]);
