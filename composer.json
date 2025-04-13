@@ -1,5 +1,5 @@
 {
-  "version": "1.0.12",
+  "version": "1.0.13",
   "name": "jsonms/php",
   "description": "A JSON.ms requests handler to install on your own server.",
   "type": "library",

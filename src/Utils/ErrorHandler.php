@@ -5,7 +5,7 @@ namespace JSONms\Utils;
 class ErrorHandler {
 
     public static function throwError($code, $body) {
-        http_response_code($code || 500);
+        http_response_code($code ?? 500);
         echo json_encode(['body' => $body]);
         exit;
     }
