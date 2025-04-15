@@ -30,9 +30,10 @@ class FileController extends BaseController {
             $finfo = finfo_open(FILEINFO_MIME_TYPE); // Return mime type
             $contentType = finfo_file($finfo, $filepath);
 
+            $time = 3600 * 24; // 1 day
             header('Content-Description: File Transfer');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
+            header("Cache-Control: public, max-age=" . $time); // Cache for 1 hour
+            header("Expires: " . gmdate("D, d M Y H:i:s", time() + $time) . " GMT");
             header('Pragma: public');
             header('Content-Length: ' . filesize($filepath));
             header('Content-Type: ' . $contentType);

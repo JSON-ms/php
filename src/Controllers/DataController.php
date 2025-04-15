@@ -20,6 +20,9 @@ class DataController extends BaseController {
             $interface = json_decode(file_get_contents($interfaceFilePath));
         }
 
+        // Do not cache the data
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+
         echo json_encode([
             'data' => $data,
             'interface' => $interface,
