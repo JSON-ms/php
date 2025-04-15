@@ -112,9 +112,12 @@ class FileController extends BaseController {
                         require_once dirname(__FILE__) . '/../../vendor/james-heinrich/getid3/getid3/getid3.php';
                         $getID3 = new getID3;
                         $fileInfo = $getID3->analyze($destPath);
+
                         if (isset($fileInfo['video'])) {
                             $meta['width'] = $fileInfo['video']['resolution_x'];
                             $meta['height'] = $fileInfo['video']['resolution_y'];
+                            $meta['frameRate'] = $fileInfo['video']['frame_rate'];
+                            $meta['duration'] = $fileInfo['playtime_seconds'];
                         }
                     } catch (getid3_exception $e) {
 
