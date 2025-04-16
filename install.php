@@ -23,7 +23,7 @@ if (strtoupper($createFile) == 'Y') {
     $publicUrl = prompt('What will be your public endpoint URL? (default: ' . $publicUrl . ') ', $publicUrl);
 
     $acao = 'https://json.ms';
-    $acao = prompt('Define the Access-Control-Allow-Origin (default: ' . $acao . '): ', $acao);
+    $acao = prompt('Define the Access-Control-Allow-Origin (default: ' . $acao . ') ', $acao);
 
     $secretKey = prompt('Your webhook secret key? ');
     $cypherKey = prompt('Your webhook cypher key? ');
