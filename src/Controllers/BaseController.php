@@ -47,15 +47,4 @@ abstract class BaseController {
             mkdir($this->uploadDir, 0755, true);
         }
     }
-
-    protected function updatestructure(string $hash, $structure) {
-        $structureFilePath = $this->structurePath . $hash . '.json';
-
-        if (file_exists($structureFilePath)) {
-            $timestamp = filemtime($structureFilePath);
-            copy($structureFilePath, $this->structureHistoryPath . $hash . '.' . $timestamp . '.json');
-        }
-
-        file_put_contents($structureFilePath, json_encode($structure));
-    }
 }

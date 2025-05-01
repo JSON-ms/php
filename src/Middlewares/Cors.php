@@ -6,7 +6,7 @@ use JSONms\Utils\Config;
 
 class Cors implements IMiddleware {
 
-    public static function run() {
+    public static function run($all = false) {
         $accessControlAllowOrigin = Config::get('ACCESS_CONTROL_ALLOW_ORIGIN');
 
         // Define allowed origins for cross-origin requests

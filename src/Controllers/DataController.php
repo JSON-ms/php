@@ -46,13 +46,13 @@ class DataController extends BaseController {
 
     public function updateAction(string $hash, \stdClass $data): void {
         $dataFilePath = $this->dataPath . $hash . '.json';
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            ErrorHandler::throwError(400, 'Invalid JSON');
-        }
+        $structureFilePath = $this->structurePath . $hash . '.json';
 
         // Update structure
-        $this->updatestructure($hash, $data->structure);
+        if (file_exists($structureFilePath)) {
+            $timestamp = filemtime($structureFilePath);
+            copy($structureFilePath, $this->structureHistoryPath . $hash . '.' . $timestamp . '.json');
+        }
 
         // Save to data and structure history if files already exist
         if (file_exists($dataFilePath)) {
@@ -62,12 +62,9 @@ class DataController extends BaseController {
 
         // Save the data and structure to JSON files
         file_put_contents($dataFilePath, json_encode($data->data));
+        file_put_contents($structureFilePath, json_encode($data->structure));
         http_response_code(200);
         echo json_encode($data);
         exit;
-    }
-
-    public function historyAction(string $hash, string $fromDate, string $toDate): void {
-
     }
 }

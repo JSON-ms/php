@@ -25,8 +25,8 @@ if (strtoupper($createFile) == 'Y') {
     $acao = 'https://json.ms';
     $acao = prompt('Define the Access-Control-Allow-Origin (default: ' . $acao . ') ', $acao);
 
-    $secretKey = prompt('Your webhook secret key? ');
-    $cypherKey = prompt('Your webhook cypher key? ');
+    $secretKey = prompt('Your endpoint secret key? ');
+    $cypherKey = prompt('Your endpoint cypher key? ');
 
     $fileContent = <<<EOD
 <?php
@@ -38,10 +38,10 @@ require 'vendor/autoload.php';
 // Load JSONms configurations
 \$jsonms = new JSONms(
     '$privatePath', // Where to read/save your data in your file system?
-    '$publicUrl', // Public path of your server (webhook)
+    '$publicUrl', // Public path of your server endpoint
     '$acao', // Set to "https://json.ms" if you do not need your own instance of JSON.ms. You can add multiple URLs by seperating them by a comma.
-    '$secretKey', // Obtain from your Webhook Endpoint in Settings panel in Advanced mode.
-    '$cypherKey', // Obtain from your Webhook Endpoint in Settings panel in Advanced mode.
+    '$secretKey', // Obtain from your endpoint in Settings panel in Advanced mode.
+    '$cypherKey', // Obtain from your endpoint in Settings panel in Advanced mode.
 );
 
 // Handle errors (if required) and requests
