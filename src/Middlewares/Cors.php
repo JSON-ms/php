@@ -6,7 +6,7 @@ use JSONms\Utils\Config;
 
 class Cors implements IMiddleware {
 
-    public static function run() {
+    public static function run($all = false) {
         $accessControlAllowOrigin = Config::get('ACCESS_CONTROL_ALLOW_ORIGIN');
 
         // Define allowed origins for cross-origin requests
@@ -21,7 +21,6 @@ class Cors implements IMiddleware {
         header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Jms-Api-Key");
         header("Access-Control-Allow-Credentials: true");
         header('Content-Type: application/json');
-        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 
         // Handle OPTIONS request
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {

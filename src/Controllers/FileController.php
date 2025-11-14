@@ -30,9 +30,10 @@ class FileController extends BaseController {
             $finfo = finfo_open(FILEINFO_MIME_TYPE); // Return mime type
             $contentType = finfo_file($finfo, $filepath);
 
+            $time = 3600 * 24; // 1 day
             header('Content-Description: File Transfer');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
+            header("Cache-Control: public, max-age=" . $time); // Cache for 1 hour
+            header("Expires: " . gmdate("D, d M Y H:i:s", time() + $time) . " GMT");
             header('Pragma: public');
             header('Content-Length: ' . filesize($filepath));
             header('Content-Type: ' . $contentType);
@@ -112,9 +113,12 @@ class FileController extends BaseController {
                         require_once dirname(__FILE__) . '/../../vendor/james-heinrich/getid3/getid3/getid3.php';
                         $getID3 = new getID3;
                         $fileInfo = $getID3->analyze($destPath);
+
                         if (isset($fileInfo['video'])) {
                             $meta['width'] = $fileInfo['video']['resolution_x'];
                             $meta['height'] = $fileInfo['video']['resolution_y'];
+                            $meta['frameRate'] = $fileInfo['video']['frame_rate'];
+                            $meta['duration'] = $fileInfo['playtime_seconds'];
                         }
                     } catch (getid3_exception $e) {
 

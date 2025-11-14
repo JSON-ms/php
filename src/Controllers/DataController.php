@@ -10,19 +10,22 @@ class DataController extends BaseController {
     public function getAction(string $hash): void {
         http_response_code(200);
         $dataFilePath = $this->dataPath . $hash . '.json';
-        $interfaceFilePath = $this->interfacePath . $hash . '.json';
+        $structureFilePath = $this->structurePath . $hash . '.json';
         $data = [];
-        $interface = [];
+        $structure = [];
         if (file_exists($dataFilePath)) {
             $data = json_decode(file_get_contents($dataFilePath));
         }
-        if (file_exists($interfaceFilePath)) {
-            $interface = json_decode(file_get_contents($interfaceFilePath));
+        if (file_exists($structureFilePath)) {
+            $structure = json_decode(file_get_contents($structureFilePath));
         }
+
+        // Do not cache the data
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 
         echo json_encode([
             'data' => $data,
-            'interface' => $interface,
+            'structure' => $structure,
             'settings' => [
                 "uploadMaxSize" => ini_get('upload_max_filesize'),
                 "postMaxSize" => ini_get('post_max_size'),
@@ -43,31 +46,25 @@ class DataController extends BaseController {
 
     public function updateAction(string $hash, \stdClass $data): void {
         $dataFilePath = $this->dataPath . $hash . '.json';
-        $interfaceFilePath = $this->interfacePath . $hash . '.json';
+        $structureFilePath = $this->structurePath . $hash . '.json';
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            ErrorHandler::throwError(400, 'Invalid JSON');
+        // Update structure
+        if (file_exists($structureFilePath)) {
+            $timestamp = filemtime($structureFilePath);
+            copy($structureFilePath, $this->structureHistoryPath . $hash . '.' . $timestamp . '.json');
         }
 
-        // Save to data and interface history if files already exist
+        // Save to data and structure history if files already exist
         if (file_exists($dataFilePath)) {
             $timestamp = filemtime($dataFilePath);
             copy($dataFilePath, $this->dataHistoryPath . $hash . '.' . $timestamp . '.json');
         }
-        if (file_exists($interfaceFilePath)) {
-            $timestamp = filemtime($interfaceFilePath);
-            copy($interfaceFilePath, $this->interfaceHistoryPath . $hash . '.' . $timestamp . '.json');
-        }
 
-        // Save the data and interface to JSON files
+        // Save the data and structure to JSON files
         file_put_contents($dataFilePath, json_encode($data->data));
-        file_put_contents($interfaceFilePath, json_encode($data->interface));
+        file_put_contents($structureFilePath, json_encode($data->structure));
         http_response_code(200);
         echo json_encode($data);
         exit;
-    }
-
-    public function historyAction(string $hash, string $fromDate, string $toDate): void {
-
     }
 }

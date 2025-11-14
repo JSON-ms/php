@@ -17,9 +17,9 @@ class Secret implements IMiddleware {
         $headers = getallheaders();
 
         // Validate if the API Key is provided and correct
-        if (!isset($headers['X-Jms-Api-Key'])) {
+        if (!isset($headers['x-jms-api-key'])) {
             ErrorHandler::throwError(401, 'API Secret Key not provided');
-        } elseif (Encryption::decrypt($headers['X-Jms-Api-Key'], $cypherKey) !== $secretKey) {
+        } elseif (Encryption::decrypt($headers['x-jms-api-key'], $cypherKey) !== $secretKey) {
             ErrorHandler::throwError(401, 'Invalid API Secret Key');
         }
     }
