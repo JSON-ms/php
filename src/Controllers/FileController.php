@@ -110,7 +110,7 @@ class FileController extends BaseController {
                 // Get video width/height
                 if (str_starts_with($fileType, 'video/')) {
                     try {
-                        require_once dirname(__FILE__) . '/../../vendor/james-heinrich/getid3/getid3/getid3.php';
+                        require_once dirname(__FILE__) . '/../../../../../vendor/james-heinrich/getid3/getid3/getid3.php';
                         $getID3 = new getID3;
                         $fileInfo = $getID3->analyze($destPath);
 
